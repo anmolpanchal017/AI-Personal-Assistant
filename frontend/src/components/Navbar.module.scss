@@ -1,0 +1,75 @@
+@use 'styles/variables' as *;
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $nav-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba($bg-primary, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid $border-subtle;
+  z-index: 50;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: opacity $transition-fast;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.logoIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-sm;
+  background: $gradient-brand;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.logoText {
+  font-size: 1rem;
+  font-weight: 600;
+  color: $text-primary;
+  letter-spacing: -0.01em;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: $radius-full;
+  background: $bg-surface;
+  border: 1px solid $border-subtle;
+  color: $text-secondary;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: $bg-surface-hover;
+    border-color: $border-hover;
+    color: $text-primary;
+  }
+}

@@ -1,21 +1,17 @@
-import Header from './components/Header';
-import AskAnything from './components/AskAnything';
-import SummarizeEmail from './components/SummarizeEmail';
-import styles from './styles/App.module.scss';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import ChatPage from './pages/ChatPage';
+import SummarizePage from './pages/SummarizePage';
 
 function App() {
   return (
-    <div className={styles.app}>
-      <main className={styles.container}>
-        <Header />
-        <AskAnything />
-        <hr className={styles.divider} />
-        <SummarizeEmail />
-        <footer className={styles.footer}>
-          Powered by <span>Groq AI</span>
-        </footer>
-      </main>
-    </div>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<ChatPage />} />
+        <Route path="/summarize" element={<SummarizePage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

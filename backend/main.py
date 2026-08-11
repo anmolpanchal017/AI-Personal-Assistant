@@ -99,4 +99,4 @@ if __name__ == "__main__":
     # ship "on" to production. Vercel never runs this block at all - it
     # imports `app` directly - so this only affects local `python main.py` runs.
     debug_mode = os.getenv("FLASK_DEBUG", "false").lower() == "true"
-    app.run(debug=debug_mode)
+    app.run(host="127.0.0.1", port=5000, debug=debug_mode)

@@ -1,0 +1,216 @@
+@use 'styles/variables' as *;
+
+.page {
+  min-height: 100vh;
+  padding-top: calc($nav-height + 40px);
+  padding-bottom: 60px;
+  display: flex;
+  justify-content: center;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.container {
+  width: 100%;
+  max-width: 680px;
+}
+
+// ─── Header ──────────────────────────────────────────────
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.iconBadge {
+  width: 52px;
+  height: 52px;
+  border-radius: $radius-lg;
+  background: linear-gradient(135deg, $accent-violet, $accent-rose);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-bottom: 18px;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: $text-primary;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 200;
+  color: $text-muted;
+  line-height: 1.5;
+}
+
+// ─── Form ────────────────────────────────────────────────
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.textareaWrapper {
+  position: relative;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 18px 20px;
+  padding-right: 44px;
+  border-radius: $radius-lg;
+  background: $bg-input;
+  border: 1px solid $border-subtle;
+  color: $text-primary;
+  font-family: $font-family;
+  font-size: 0.925rem;
+  font-weight: 300;
+  line-height: 1.7;
+  resize: vertical;
+  outline: none;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &::placeholder {
+    color: $text-placeholder;
+  }
+
+  &:focus {
+    border-color: $border-focus;
+    box-shadow: 0 0 0 3px rgba($accent-blue, 0.08);
+  }
+
+  &:hover:not(:focus) {
+    border-color: $border-hover;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.clearButton {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: $bg-surface;
+  color: $text-muted;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: $bg-surface-hover;
+    color: $text-primary;
+  }
+}
+
+.submitButton {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: $radius-full;
+  border: none;
+  background: linear-gradient(135deg, $accent-violet, $accent-rose);
+  color: #fff;
+  font-family: $font-family;
+  font-size: 0.925rem;
+  font-weight: 200;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba($accent-violet, 0.25);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+// ─── Result ──────────────────────────────────────────────
+.result {
+  margin-top: 28px;
+  padding: 24px;
+  border-radius: $radius-lg;
+  background: $bg-surface;
+  border: 1px solid $border-subtle;
+  animation: fadeSlideIn 0.35s ease;
+
+  &.error {
+    border-color: rgba($accent-rose, 0.3);
+    background: rgba($accent-rose, 0.05);
+
+    .resultLabel {
+      color: $accent-rose;
+    }
+
+    .resultText {
+      color: $accent-rose;
+    }
+  }
+}
+
+.resultHeader {
+  margin-bottom: 12px;
+}
+
+.resultLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $accent-violet;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.resultText {
+  font-size: 0.925rem;
+  line-height: 1.8;
+  color: $text-primary;
+  white-space: pre-wrap;
+}
+
+// ─── Animations ──────────────────────────────────────────
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
