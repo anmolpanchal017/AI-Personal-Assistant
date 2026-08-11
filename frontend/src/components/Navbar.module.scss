@@ -1,75 +1,106 @@
 @use 'styles/variables' as *;
 
-.navbar {
+.navWrapper {
   position: fixed;
-  top: 0;
+  top: 20px;
   left: 0;
   right: 0;
-  height: $nav-height;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  padding: 0 16px;
+  pointer-events: none;
+}
+
+.navbar {
+  pointer-events: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  background: rgba($bg-primary, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid $border-subtle;
-  z-index: 50;
+  gap: 36px;
+  padding: 8px 10px 8px 24px;
+  background: rgba(22, 24, 29, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  box-shadow: 
+    0 12px 36px -8px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  max-width: 640px;
+  width: 100%;
+  transition: all $transition-base;
+
+  @media (max-width: 600px) {
+    padding: 6px 8px 6px 16px;
+    gap: 16px;
+  }
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  cursor: pointer;
+  text-decoration: none;
   transition: opacity $transition-fast;
 
   &:hover {
-    opacity: 0.8;
+    opacity: 0.85;
   }
 }
 
-.logoIcon {
-  width: 32px;
-  height: 32px;
-  border-radius: $radius-sm;
-  background: $gradient-brand;
+.logoText {
+  font-size: 1.05rem;
+  font-weight: 100;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  font-family: $font-family;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+
+  @media (max-width: 500px) {
+    gap: 16px;
+  }
+}
+
+.navLink {
+  font-size: 0.9rem;
+  font-weight: 100;
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color $transition-fast;
+  padding: 4px 0;
+
+  &:hover {
+    color: #ffffff;
+  }
+
+  &.active {
+    color: #ffffff;
+    font-weight: 200;
+  }
+}
+
+.userAvatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #9ca3af;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-}
-
-.logoText {
-  font-size: 1rem;
-  font-weight: 600;
-  color: $text-primary;
-  letter-spacing: -0.01em;
-}
-
-.navActions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.navButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: $radius-full;
-  background: $bg-surface;
-  border: 1px solid $border-subtle;
-  color: $text-secondary;
-  font-size: 0.85rem;
-  font-weight: 500;
   cursor: pointer;
   transition: all $transition-fast;
 
   &:hover {
-    background: $bg-surface-hover;
-    border-color: $border-hover;
-    color: $text-primary;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
   }
 }

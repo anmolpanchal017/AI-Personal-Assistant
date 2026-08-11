@@ -51,12 +51,12 @@ function SummarizePage() {
       <div className={styles.container}>
         {/* Header */}
         <div className={styles.header}>
-          <div className={styles.iconBadge}>
+          {/* <div className={styles.iconBadge}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
               <polyline points="22,6 12,13 2,6" />
             </svg>
-          </div>
+          </div> */}
           <h1 className={styles.title}>Summarize Email</h1>
           <p className={styles.subtitle}>
             Paste your email below and get a concise AI-generated summary in seconds
