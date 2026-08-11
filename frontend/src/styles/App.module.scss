@@ -1,0 +1,64 @@
+@use 'styles/variables' as *;
+
+.app {
+  min-height: 100vh;
+  background: $bg-primary;
+  background-image: $gradient-bg;
+  position: relative;
+  padding: 40px 20px 60px;
+
+  // Subtle animated background grain
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba($accent-indigo, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba($accent-violet, 0.04) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    $border-subtle 30%,
+    rgba($accent-indigo, 0.2) 50%,
+    $border-subtle 70%,
+    transparent 100%
+  );
+  margin: 8px 0;
+}
+
+.footer {
+  text-align: center;
+  padding-top: 24px;
+  color: $text-muted;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+
+  span {
+    background: $gradient-brand;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+  }
+}

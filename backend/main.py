@@ -1,19 +1,22 @@
 import os
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from groq import Groq
 
 # Load environment variables from .env when running locally.
 # On Vercel, environment variables are injected directly, so this is a no-op there.
 load_dotenv()
 
-# NOTE: static_folder is set to "public" (not the default "static") because
-# Vercel serves everything in public/** straight from its CDN and does not
-# use Flask's built-in static file handling. Keeping both folders in sync
-# manually is a common source of "CSS works locally but not on Vercel" bugs,
-# so we point Flask at the same "public" folder for local development too.
-app = Flask(__name__, static_folder="public", static_url_path="")
+# Flask is now a pure JSON API — the React frontend handles all UI rendering.
+# No static_folder or template_folder is needed.
+app = Flask(__name__)
+
+# Allow CORS so the React dev server (localhost:5173) can call the API
+# during local development. In production on Vercel, both frontend and
+# backend share the same origin, so CORS headers are harmless but not required.
+CORS(app)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 # llama-3.3-70b-versatile was deprecated by Groq (announced June 17, 2026) and
@@ -35,11 +38,6 @@ def _missing_api_key_response():
         ),
         500,
     )
-
-
-@app.route("/")
-def hello_world():
-    return render_template("index.html")
 
 
 @app.route("/ask", methods=["POST"])

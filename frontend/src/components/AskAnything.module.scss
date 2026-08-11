@@ -1,0 +1,143 @@
+@use 'styles/variables' as *;
+
+.card {
+  background: $bg-card;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-lg;
+  padding: 28px;
+  backdrop-filter: blur(12px);
+  transition: border-color $transition-base, box-shadow $transition-base;
+
+  &:hover {
+    border-color: rgba($accent-indigo, 0.2);
+    box-shadow: $shadow-glow;
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-md;
+  background: $gradient-brand;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: $text-primary;
+  letter-spacing: -0.01em;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-md;
+  background: rgba(255, 255, 255, 0.03);
+  color: $text-primary;
+  font-family: $font-family;
+  font-size: 0.925rem;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  outline: none;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+
+  &:focus {
+    border-color: $border-focus;
+    box-shadow: 0 0 0 3px rgba($accent-indigo, 0.12);
+  }
+}
+
+.button {
+  align-self: flex-start;
+  padding: 12px 28px;
+  border: none;
+  border-radius: $radius-md;
+  background: $gradient-brand;
+  color: #fff;
+  font-family: $font-family;
+  font-size: 0.925rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity $transition-fast, transform $transition-fast, box-shadow $transition-fast;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity: 0;
+    transition: opacity $transition-fast;
+  }
+
+  &:hover:not(:disabled) {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba($accent-indigo, 0.3);
+
+    &::after {
+      opacity: 1;
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.response {
+  margin-top: 4px;
+  padding: 16px 18px;
+  border-radius: $radius-md;
+  background: rgba($accent-indigo, 0.06);
+  border-left: 3px solid $accent-indigo;
+  color: $text-primary;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  animation: fadeIn 0.3s ease;
+}
+
+.error {
+  background: rgba($accent-rose, 0.08);
+  border-left-color: $accent-rose;
+  color: $accent-rose;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

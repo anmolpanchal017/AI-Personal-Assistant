@@ -1,10 +1,20 @@
+# Node
+node_modules/
+
+# Python
 venv/
 .env
 __pycache__/
 *.pyc
 
+# IDE
 .vscode/
 
+# OS
 .DS_Store
 
+# Logs
 *.log
+
+# Build output
+frontend/dist/
