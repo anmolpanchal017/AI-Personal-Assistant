@@ -95,8 +95,9 @@ def summarize():
 
 
 if __name__ == "__main__":
-    # Debug mode is controlled by an env var so it can never accidentally
-    # ship "on" to production. Vercel never runs this block at all - it
-    # imports `app` directly - so this only affects local `python main.py` runs.
     debug_mode = os.getenv("FLASK_DEBUG", "false").lower() == "true"
-    app.run(host="127.0.0.1", port=5000, debug=debug_mode)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=debug_mode
+    )
