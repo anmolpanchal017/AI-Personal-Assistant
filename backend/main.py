@@ -101,3 +101,11 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", 5000)),
         debug=debug_mode
     )
+
+
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({
+        "status": "Backend is running",
+        "endpoints": ["/ask", "/summarize"]
+    })
