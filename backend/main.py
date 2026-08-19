@@ -13,10 +13,13 @@ load_dotenv()
 # No static_folder or template_folder is needed.
 app = Flask(__name__)
 
-# Allow CORS so the React dev server (localhost:5173) can call the API
-# during local development. In production on Vercel, both frontend and
-# backend share the same origin, so CORS headers are harmless but not required.
-CORS(app)
+# Configure CORS: Allow restricted origins if specified via env, otherwise default to all origins
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS")
+if allowed_origins_env:
+    origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+    CORS(app, origins=origins)
+else:
+    CORS(app)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 # llama-3.3-70b-versatile was deprecated by Groq (announced June 17, 2026) and

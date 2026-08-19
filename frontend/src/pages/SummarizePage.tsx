@@ -19,7 +19,8 @@ function SummarizePage() {
       const formData = new FormData();
       formData.append('email', email);
 
-      const res = await fetch('/summarize', {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+      const res = await fetch(`${apiBase}/summarize`, {
         method: 'POST',
         body: formData,
       });

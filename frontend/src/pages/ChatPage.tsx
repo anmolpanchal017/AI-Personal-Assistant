@@ -49,7 +49,8 @@ function ChatPage() {
       const formData = new FormData();
       formData.append('question', question);
 
-      const res = await fetch('/ask', {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+      const res = await fetch(`${apiBase}/ask`, {
         method: 'POST',
         body: formData,
       });
