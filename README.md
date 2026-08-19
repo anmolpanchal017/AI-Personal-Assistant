@@ -3,9 +3,9 @@
 A modern, full-stack AI Personal Assistant web application powered by **Groq API** (`openai/gpt-oss-120b`), built with a **React 19 + TypeScript** frontend and a **Python / Flask** backend API.
 
 Features:
-- **Ask Anything (Chat)** — Interactive AI assistant chat interface with real-time responses.
+- **Ask Anything (Chat)** — Interactive AI assistant chat interface with real-time streaming-like responses.
 - **Summarize Email** — Instant email condenser that distills long emails into concise 2–3 sentence summaries.
-- **Floating Glassmorphism UI** — Custom pill navbar design system built with SCSS modules.
+- **Floating Glassmorphism UI** — Custom pill navbar design system built with SCSS modules and responsive layout.
 
 ---
 
@@ -14,10 +14,10 @@ Features:
 | Layer | Technology |
 | :--- | :--- |
 | **Frontend** | React 19, TypeScript, Vite, SCSS Modules |
-| **Backend** | Python 3, Flask, Flask-CORS, python-dotenv |
+| **Backend** | Python 3, Flask, Gunicorn, Flask-CORS, python-dotenv |
 | **AI Model** | Groq API (`openai/gpt-oss-120b`) |
-| **Monorepo Runner**| `start.sh` (Bash background process manager) |
-| **Deployment** | Vercel (Production Serverless) & AWS (EC2 / App Runner / S3+CloudFront) |
+| **Frontend Deployment** | **Vercel** |
+| **Backend Deployment** | **Render** |
 
 ---
 
@@ -26,9 +26,10 @@ Features:
 ```text
 AI-Personal-Assistant/
 ├── backend/                  ← Python Flask API
-│   ├── main.py               ← API Endpoints (/ask, /summarize)
-│   ├── requirements.txt      ← Dependencies (Flask, Groq, dotenv, CORS)
-│   └── .env                  ← Environment variables (GROQ_API_KEY)
+│   ├── main.py               ← API Endpoints (/ask, /summarize) with CORS security
+│   ├── requirements.txt      ← Dependencies (Flask, Groq, dotenv, CORS, Gunicorn)
+│   ├── .env.example          ← Template environment variables
+│   └── .env                  ← Environment variables (ignored by Git)
 ├── frontend/                 ← React + TypeScript SPA
 │   ├── src/
 │   │   ├── components/       ← Navbar, floating glass UI components
@@ -36,11 +37,12 @@ AI-Personal-Assistant/
 │   │   ├── styles/           ← SCSS design tokens & global styles
 │   │   ├── App.tsx           ← React Router setup
 │   │   └── main.tsx          ← SPA Entry point
+│   ├── vercel.json           ← SPA routing config
 │   ├── index.html            ← App HTML shell (Inter font)
 │   ├── vite.config.ts        ← Dev proxy configuration
-│   └── package.json          ← Frontend packages
-├── start.sh                  ← One-command launcher script
-├── vercel.json               ← Vercel build & route rewrites config
+│   └── package.json          ← Frontend dependencies & build scripts
+├── start.sh                  ← Local monorepo launcher script
+├── vercel.json               ← Root Vercel deployment configuration
 └── README.md
 ```
 
@@ -55,50 +57,66 @@ AI-Personal-Assistant/
 
 ---
 
-### 2. Environment Setup
+### 2. Backend Setup (`venv`)
 
-Create a `.env` file inside the `backend/` directory:
+Navigate to the `backend` directory, create a virtual environment, activate it, and install dependencies:
+
+#### Windows (PowerShell):
+```powershell
+cd backend
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+#### macOS / Linux:
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+---
+
+### 3. Environment Variables Configuration
+
+Create a `.env` file inside the `backend/` directory based on `.env.example`:
 
 ```bash
 # In backend/.env
-GROQ_API_KEY=your_groq_api_key_here
+GROQ_API_KEY=your_actual_groq_api_key_here
 GROQ_MODEL=openai/gpt-oss-120b
+FLASK_DEBUG=true
+ALLOWED_ORIGINS=http://localhost:5173
 ```
 
 ---
 
-### 3. Install Dependencies
+### 4. Run the Application
 
-#### Install Backend Requirements:
+#### Option A: Running separately
+
+**Backend Terminal:**
 ```bash
 cd backend
-pip install -r requirements.txt
-cd ..
+python main.py
+# Runs on http://localhost:5000
 ```
 
-#### Install Frontend Packages:
+**Frontend Terminal:**
 ```bash
 cd frontend
 npm install
-cd ..
+npm run dev
+# Runs on http://localhost:5173
 ```
 
----
-
-### 4. Run Project with One Command
-
-Run the [`start.sh`](./start.sh) script from the root directory:
-
+#### Option B: Running with `start.sh` (Linux / macOS / Git Bash)
 ```bash
 chmod +x start.sh
 ./start.sh
 ```
-
-This single command automatically starts:
-- 🐍 **Flask Backend** at `http://localhost:5000`
-- ⚡ **React Frontend** at `http://localhost:5173`
-
-Press `Ctrl + C` in the terminal to cleanly shut down both backend and frontend processes.
 
 ---
 
@@ -126,114 +144,33 @@ Press `Ctrl + C` in the terminal to cleanly shut down both backend and frontend 
 
 ## ☁️ Deployment Guide
 
-### Option 1: Vercel (Recommended — Serverless)
+### 1. Backend Deployment (Render)
 
-The project includes a pre-configured [`vercel.json`](./vercel.json) file for zero-config Vercel deployment.
-
-1. **Push your code** to GitHub / GitLab / Bitbucket.
-2. Log into [Vercel](https://vercel.com/) and click **"New Project"**.
-3. Import your repository.
-4. Add Environment Variable in **Settings → Environment Variables**:
+1. Log in to [Render](https://dashboard.render.com/) and click **New → Web Service**.
+2. Connect your GitHub repository.
+3. Set the following settings:
+   - **Root Directory:** `backend`
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `gunicorn main:app`
+4. Add **Environment Variables** in Render Settings:
    - `GROQ_API_KEY` = `your_groq_api_key`
+   - `GROQ_MODEL` = `openai/gpt-oss-120b`
+   - `ALLOWED_ORIGINS` = `https://your-vercel-domain.vercel.app` (restricts API access to your frontend)
 5. Click **Deploy**.
 
-Vercel automatically executes `cd frontend && npm install && npm run build`, routes static assets from `frontend/dist`, and serves `/ask` and `/summarize` as serverless Python functions from `backend/main.py`.
-
 ---
 
-### Option 2: AWS Deployment
+### 2. Frontend Deployment (Vercel)
 
-#### Method A: AWS EC2 (Virtual Server with Nginx & Gunicorn)
-
-1. **Launch EC2 Instance**:
-   - Create an Ubuntu 22.04 LTS instance (e.g., `t3.micro` or `t3.small`).
-   - Allow ports `80` (HTTP), `443` (HTTPS), and `22` (SSH) in Security Groups.
-
-2. **Connect & Install Packages**:
-   ```bash
-   sudo apt update && sudo apt install -y python3-pip python3-venv nginx nodejs npm
-   ```
-
-3. **Clone & Setup App**:
-   ```bash
-   git clone https://github.com/your-username/AI-Personal-Assistant.git
-   cd AI-Personal-Assistant
-   
-   # Setup Backend
-   cd backend
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt gunicorn
-   echo "GROQ_API_KEY=your_actual_key" > .env
-   cd ..
-
-   # Build Frontend
-   cd frontend
-   npm install
-   npm run build
-   cd ..
-   ```
-
-4. **Configure Systemd Service for Flask (Gunicorn)**:
-   Create `/etc/systemd/system/flask-backend.service`:
-   ```ini
-   [Unit]
-   Description=AI Personal Assistant Flask API
-   After=network.target
-
-   [Service]
-   User=ubuntu
-   WorkingDirectory=/home/ubuntu/AI-Personal-Assistant/backend
-   Environment="PATH=/home/ubuntu/AI-Personal-Assistant/backend/venv/bin"
-   ExecStart=/home/ubuntu/AI-Personal-Assistant/backend/venv/bin/gunicorn --bind 127.0.0.1:5000 main:app
-
-   [Install]
-   WantedBy=multi-user.target
-   ```
-   Start & enable service:
-   ```bash
-   sudo systemctl daemon-reload
-   sudo systemctl start flask-backend
-   sudo systemctl enable flask-backend
-   ```
-
-5. **Configure Nginx**:
-   Update `/etc/nginx/sites-available/default`:
-   ```nginx
-   server {
-       listen 80;
-       server_name _;
-
-       # Serve React Static Build
-       location / {
-           root /home/ubuntu/AI-Personal-Assistant/frontend/dist;
-           try_files $uri $uri/ /index.html;
-       }
-
-       # Proxy API requests to Flask Backend
-       location /ask {
-           proxy_pass http://127.0.0.1:5000;
-           proxy_set_header Host $host;
-           proxy_set_header X-Real-IP $remote_addr;
-       }
-
-       location /summarize {
-           proxy_pass http://127.0.0.1:5000;
-           proxy_set_header Host $host;
-           proxy_set_header X-Real-IP $remote_addr;
-       }
-   }
-   ```
-   Restart Nginx:
-   ```bash
-   sudo systemctl restart nginx
-   ```
-
----
-
-#### Method B: AWS App Runner + S3 / Amplify
-1. Push backend image or code repository to **AWS App Runner** providing `GROQ_API_KEY` in environment configuration.
-2. Deploy frontend static build (`frontend/dist`) to **AWS S3 + CloudFront** or **AWS Amplify**.
+1. Log in to [Vercel](https://vercel.com/) and import your repository.
+2. Configure **Environment Variables** in Vercel Settings:
+   - `VITE_API_BASE_URL` = `https://your-render-backend-url.onrender.com`
+3. Configure **Build & Development Settings**:
+   - **Root Directory:** `frontend`
+   - **Framework Preset:** Vite
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+4. Click **Deploy**.
 
 ---
 
